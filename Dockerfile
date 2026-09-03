@@ -5,7 +5,15 @@ RUN npm install --global npm@11.6.4 && npm ci
 
 FROM dependencies AS builder
 COPY . .
-RUN npm run build
+RUN NODE_ENV=production \
+    HOST=0.0.0.0 \
+    PORT=3333 \
+    LOG_LEVEL=info \
+    APP_KEY=build-only-key \
+    APP_URL=http://localhost:3333 \
+    DATABASE_URL=postgresql://build:build@localhost:5432/build \
+    SESSION_DRIVER=cookie \
+    npm run build
 
 FROM node:24-alpine AS production
 RUN apk add --no-cache dumb-init
