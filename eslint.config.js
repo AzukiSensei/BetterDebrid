@@ -5,6 +5,9 @@ const [reactBase, ...reactRest] = react
 
 export default configApp(
   {
+    ignores: ['database/schema.ts'],
+  },
+  {
     ...reactBase,
     rules: {
       ...reactBase.rules,
