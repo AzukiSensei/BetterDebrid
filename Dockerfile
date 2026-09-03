@@ -1,7 +1,7 @@
 FROM node:24-alpine AS dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install --global npm@11.6.4 && npm ci
 
 FROM dependencies AS builder
 COPY . .
@@ -15,7 +15,7 @@ ENV NODE_ENV=production \
     PORT=3333
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm install --global npm@11.6.4 && npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/build ./
 RUN mkdir -p tmp && chown -R node:node /app
 

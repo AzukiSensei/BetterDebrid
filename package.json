@@ -4,6 +4,7 @@
   "description": "Interface React et AdonisJS premium pour l’API AllDebrid, compatible WebMCP.",
   "private": true,
   "type": "module",
+  "packageManager": "npm@11.6.4",
   "license": "MIT",
   "homepage": "https://better.azks.fr/",
   "repository": {
