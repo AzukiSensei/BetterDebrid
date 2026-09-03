@@ -1,0 +1,12 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+build
+node_modules
+tmp
+design-system
+npm-debug.log
+Dockerfile*
+README.md
