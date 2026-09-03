@@ -24,8 +24,8 @@ ENV NODE_ENV=production \
 
 COPY package.json package-lock.json ./
 RUN npm install --global npm@11.6.4 && npm ci --omit=dev && npm cache clean --force
-COPY --from=builder /app/build ./
-RUN mkdir -p tmp && chown -R node:node /app
+COPY --from=builder --chown=node:node /app/build ./
+RUN mkdir -p tmp && chown node:node tmp
 
 USER node
 EXPOSE 3333
