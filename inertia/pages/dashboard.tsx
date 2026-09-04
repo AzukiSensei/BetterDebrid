@@ -1,16 +1,20 @@
 import { Head } from '@inertiajs/react'
-import { Link } from '@adonisjs/inertia/react'
+import { Form, Link } from '@adonisjs/inertia/react'
 import {
-  ArrowDownToLine,
-  ArrowRight,
-  CheckCircle2,
-  Clock3,
-  CloudDownload,
-  DatabaseZap,
-  Gauge,
-  Magnet,
-  TriangleAlert,
-} from 'lucide-react'
+  CircleCheckIcon as CheckCircle2,
+  ClockIcon as Clock3,
+  CloudIcon as CloudDownload,
+  DashboardIcon as Gauge,
+  Disc3Icon as Magnet,
+  DownloadIcon as ArrowDownToLine,
+  ArrowRightIcon as ArrowRight,
+  HardDriveIcon as DatabaseZap,
+  LinkIcon as Link2,
+  LoaderCircleIcon as LoaderCircle,
+  UploadIcon as FileUp,
+  TriangleAlertIcon as TriangleAlert,
+} from '@animateicons/react/lucide'
+import { useState } from 'react'
 import { AppShell } from '~/components/app_shell'
 import { ConnectionRequired } from '~/components/connection_required'
 import { formatBytes, formatDate, magnetProgress } from '~/utils/format'
@@ -57,6 +61,7 @@ export default function Dashboard({
   activities,
   apiError,
 }: DashboardProps) {
+  const [torrentName, setTorrentName] = useState('')
   const readyCount = magnets.filter((magnet) => magnet.statusCode === 4).length
   const activeCount = magnets.filter(
     (magnet) => magnet.statusCode >= 0 && magnet.statusCode < 4
@@ -89,6 +94,77 @@ export default function Dashboard({
               <Link href="/app/reglages">Vérifier</Link>
             </div>
           )}
+
+          <section className="universal-command" aria-labelledby="universal-command-title">
+            <div className="universal-command-copy">
+              <span className="command-orbit" aria-hidden="true">
+                <Link2 />
+              </span>
+              <div>
+                <p className="eyebrow light">Entrée universelle</p>
+                <h2 id="universal-command-title">Un lien. Un magnet. Un torrent.</h2>
+                <p>
+                  Collez n’importe quelle source compatible : BetterDebrid reconnaît l’action à
+                  effectuer et vous emmène directement au résultat.
+                </p>
+              </div>
+            </div>
+            <Form
+              route="universal_input.store"
+              encType="multipart/form-data"
+              className="universal-command-form"
+              toolname="betterdebrid.universal_input_form"
+              tooldescription="Prépare le traitement d’un lien hébergeur, d’un magnet, d’un hash ou d’un fichier torrent avec AllDebrid. La soumission reste à confirmer par l’utilisateur."
+            >
+              {({ processing }) => (
+                <>
+                  <div className="universal-input-row">
+                    <div className="universal-text-input">
+                      <Link2 aria-hidden="true" />
+                      <label htmlFor="universal-source" className="sr-only">
+                        Lien, magnet ou hash
+                      </label>
+                      <input
+                        id="universal-source"
+                        name="source"
+                        type="text"
+                        maxLength={12_000}
+                        placeholder="Collez un lien, magnet ou hash…"
+                        aria-describedby="universal-hint"
+                        toolparamdescription="URL HTTP(S), URI magnet ou hash BitTorrent à traiter. Laisser vide si un fichier torrent est choisi."
+                      />
+                    </div>
+                    <label className="universal-file-button" htmlFor="universal-torrent">
+                      <FileUp aria-hidden="true" />
+                      <span>{torrentName || 'Fichier .torrent'}</span>
+                    </label>
+                    <input
+                      id="universal-torrent"
+                      name="torrent"
+                      type="file"
+                      accept=".torrent,application/x-bittorrent"
+                      className="visually-hidden-file"
+                      onChange={(event) =>
+                        setTorrentName(event.currentTarget.files?.[0]?.name || '')
+                      }
+                      toolparamdescription="Fichier BitTorrent optionnel, 10 Mo maximum."
+                    />
+                    <button type="submit" className="button universal-submit" disabled={processing}>
+                      {processing ? (
+                        <LoaderCircle className="spin" aria-hidden="true" />
+                      ) : (
+                        <ArrowRight aria-hidden="true" />
+                      )}
+                      <span>{processing ? 'Traitement…' : 'Lancer'}</span>
+                    </button>
+                  </div>
+                  <p id="universal-hint" className="universal-hint">
+                    Liens hébergeurs · HTTP(S) · magnets · hashes · fichiers torrent
+                  </p>
+                </>
+              )}
+            </Form>
+          </section>
 
           <section className="account-banner" aria-labelledby="account-title">
             <div>

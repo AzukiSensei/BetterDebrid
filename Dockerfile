@@ -16,7 +16,7 @@ RUN NODE_ENV=production \
     npm run build
 
 FROM node:24-alpine AS production
-RUN apk add --no-cache dumb-init
+RUN apk add --no-cache dumb-init ffmpeg
 WORKDIR /app
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \

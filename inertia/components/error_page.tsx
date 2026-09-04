@@ -1,6 +1,6 @@
 import { Link } from '@adonisjs/inertia/react'
 import { Head } from '@inertiajs/react'
-import { ArrowLeft, Home } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft, HouseIcon as Home } from '@animateicons/react/lucide'
 import { BrandMark } from '~/components/brand_mark'
 
 export function ErrorPage({

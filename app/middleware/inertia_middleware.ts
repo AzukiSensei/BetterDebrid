@@ -2,6 +2,10 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import UserTransformer from '#transformers/user_transformer'
 import BaseInertiaMiddleware from '@adonisjs/inertia/inertia_middleware'
+import env from '#start/env'
+import app from '@adonisjs/core/services/app'
+
+const DEVELOPMENT_TURNSTILE_SITE_KEY = '1x00000000000000000000AA'
 
 export default class InertiaMiddleware extends BaseInertiaMiddleware {
   share(ctx: HttpContext) {
@@ -22,6 +26,9 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
     return {
       errors: ctx.inertia.always(this.getValidationErrors(ctx)),
       user: ctx.inertia.always(auth?.user ? UserTransformer.transform(auth.user) : undefined),
+      turnstileSiteKey: ctx.inertia.always(
+        env.get('TURNSTILE_SITE_KEY') ?? (app.inProduction ? '' : DEVELOPMENT_TURNSTILE_SITE_KEY)
+      ),
     }
   }
 

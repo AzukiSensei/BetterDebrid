@@ -1,9 +1,22 @@
 import { Head } from '@inertiajs/react'
 import { Form, Link } from '@adonisjs/inertia/react'
-import { ArrowRight, LoaderCircle, LockKeyhole, Mail, UserRound } from 'lucide-react'
+import {
+  ArrowRightIcon as ArrowRight,
+  LoaderCircleIcon as LoaderCircle,
+  LockIcon as LockKeyhole,
+  MailIcon as Mail,
+  UserRoundIcon as UserRound,
+} from '@animateicons/react/lucide'
+import { useState } from 'react'
 import { AuthShell } from '~/components/auth_shell'
+import { PasswordVisibilityButton } from '~/components/password_visibility_button'
+import { TurnstileWidget } from '~/components/turnstile_widget'
+import type { InertiaProps } from '~/types'
 
-export default function Signup() {
+export default function Signup({ turnstileSiteKey }: InertiaProps) {
+  const [passwordVisible, setPasswordVisible] = useState(false)
+  const [confirmationVisible, setConfirmationVisible] = useState(false)
+
   return (
     <AuthShell mode="signup">
       <Head title="Créer un compte" />
@@ -73,10 +86,10 @@ export default function Signup() {
             <div className="auth-form-columns">
               <div className="field-group">
                 <label htmlFor="password">Mot de passe</label>
-                <div className="input-with-icon">
+                <div className="input-with-icon input-with-action">
                   <LockKeyhole aria-hidden="true" />
                   <input
-                    type="password"
+                    type={passwordVisible ? 'text' : 'password'}
                     name="password"
                     id="password"
                     required
@@ -86,6 +99,11 @@ export default function Signup() {
                     aria-invalid={Boolean(errors.password)}
                     aria-describedby={errors.password ? 'password-error' : 'password-hint'}
                     toolparamdescription="Mot de passe du nouveau compte, 8 caractères minimum."
+                  />
+                  <PasswordVisibilityButton
+                    controls="password"
+                    visible={passwordVisible}
+                    onToggle={() => setPasswordVisible((visible) => !visible)}
                   />
                 </div>
                 {errors.password ? (
@@ -101,10 +119,10 @@ export default function Signup() {
 
               <div className="field-group">
                 <label htmlFor="passwordConfirmation">Confirmation</label>
-                <div className="input-with-icon">
+                <div className="input-with-icon input-with-action">
                   <LockKeyhole aria-hidden="true" />
                   <input
-                    type="password"
+                    type={confirmationVisible ? 'text' : 'password'}
                     name="passwordConfirmation"
                     id="passwordConfirmation"
                     required
@@ -116,6 +134,11 @@ export default function Signup() {
                       errors.passwordConfirmation ? 'confirmation-error' : undefined
                     }
                     toolparamdescription="Répétition exacte du mot de passe."
+                  />
+                  <PasswordVisibilityButton
+                    controls="passwordConfirmation"
+                    visible={confirmationVisible}
+                    onToggle={() => setConfirmationVisible((visible) => !visible)}
                   />
                 </div>
                 {errors.passwordConfirmation && (
@@ -146,10 +169,18 @@ export default function Signup() {
               </p>
             )}
 
+            {turnstileSiteKey ? (
+              <TurnstileWidget siteKey={turnstileSiteKey} action="signup" />
+            ) : (
+              <p className="field-error" role="alert">
+                La protection anti-robot est temporairement indisponible.
+              </p>
+            )}
+
             <button
               type="submit"
               className="button button-accent button-wide button-large"
-              disabled={processing}
+              disabled={processing || !turnstileSiteKey}
             >
               {processing ? <LoaderCircle className="spin" aria-hidden="true" /> : null}
               {processing ? 'Création…' : 'Créer mon espace'}

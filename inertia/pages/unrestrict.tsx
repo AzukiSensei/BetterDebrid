@@ -1,17 +1,19 @@
 import { Head } from '@inertiajs/react'
 import { Form, Link } from '@adonisjs/inertia/react'
 import {
-  ArrowDownToLine,
-  Check,
-  Clock3,
-  Copy,
-  ExternalLink,
-  Film,
-  KeyRound,
-  Link2,
-  LoaderCircle,
-  TriangleAlert,
-} from 'lucide-react'
+  CheckIcon as Check,
+  ClockIcon as Clock3,
+  CopyIcon as Copy,
+  DownloadIcon as ArrowDownToLine,
+  ExternalLinkIcon as ExternalLink,
+  HeadphonesIcon,
+  KeyRoundIcon as KeyRound,
+  LinkIcon as Link2,
+  LoaderCircleIcon as LoaderCircle,
+  TriangleAlertIcon as TriangleAlert,
+  VideoIcon as Film,
+  VideoIcon,
+} from '@animateicons/react/lucide'
 import { useState } from 'react'
 import { AppShell } from '~/components/app_shell'
 import { ConnectionRequired } from '~/components/connection_required'
@@ -26,6 +28,8 @@ type UnlockResult = {
   id?: string
   delayed?: number
   timeLeft?: number
+  mediaToken?: string
+  mediaKind?: 'video' | 'audio'
   streams?: Array<{
     id: string
     ext?: string
@@ -297,6 +301,19 @@ function UnlockResultCard({ result }: { result: UnlockResult }) {
       </div>
       {result.link ? (
         <div className="result-actions">
+          {result.mediaToken && (
+            <Link
+              href={`/app/lecteur?token=${encodeURIComponent(result.mediaToken)}`}
+              className="button button-dark"
+            >
+              {result.mediaKind === 'audio' ? (
+                <HeadphonesIcon aria-hidden="true" />
+              ) : (
+                <VideoIcon aria-hidden="true" />
+              )}
+              Lire maintenant
+            </Link>
+          )}
           <a href={result.link} className="button button-accent" target="_blank" rel="noreferrer">
             Télécharger <ExternalLink aria-hidden="true" />
           </a>

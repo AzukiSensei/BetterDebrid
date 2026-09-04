@@ -4,6 +4,7 @@ import AllDebridService, {
   type AllDebridUnlockedLink,
 } from '#services/all_debrid_service'
 import { findConnection, requireConnection } from '#services/connection_service'
+import MediaTokenService from '#services/media_token_service'
 import {
   delayedLinkValidator,
   streamingLinkValidator,
@@ -13,6 +14,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UnrestrictController {
   private client = new AllDebridService()
+  private mediaTokens = new MediaTokenService()
 
   async index({ auth, inertia }: HttpContext) {
     return inertia.render('unrestrict', {
@@ -49,6 +51,7 @@ export default class UnrestrictController {
           delayed: result.status === 1 ? payload.id : undefined,
           link: result.link,
           timeLeft: result.time_left,
+          ...this.mediaFor(auth.user!.id, result.link, 'Lien en préparation'),
         },
         error: result.status === 3 ? 'AllDebrid n’a pas pu générer ce lien.' : null,
         submittedLink: null,
@@ -80,7 +83,10 @@ export default class UnrestrictController {
       )
       return inertia.render('unrestrict', {
         connected: true,
-        result,
+        result: {
+          ...result,
+          ...this.mediaFor(userId, result.link, result.filename),
+        },
         error: null,
         submittedLink,
       })
@@ -102,5 +108,11 @@ export default class UnrestrictController {
           : 'Impossible de déverrouiller ce lien.',
       submittedLink,
     })
+  }
+
+  private mediaFor(userId: number, link: string | undefined, filename: string) {
+    if (!link) return {}
+    const media = this.mediaTokens.create(userId, link, filename)
+    return media ? { mediaToken: media.token, mediaKind: media.kind } : {}
   }
 }

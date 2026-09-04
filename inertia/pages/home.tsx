@@ -1,20 +1,20 @@
 import { Head } from '@inertiajs/react'
 import { Link } from '@adonisjs/inertia/react'
 import {
-  Activity,
-  ArrowDown,
-  ArrowRight,
-  Bot,
-  Check,
-  Clock3,
-  KeyRound,
-  Link2,
-  LockKeyhole,
-  Magnet,
-  ShieldCheck,
-  Sparkles,
-  Zap,
-} from 'lucide-react'
+  ActivityIcon as Activity,
+  ArrowDownIcon as ArrowDown,
+  ArrowRightIcon as ArrowRight,
+  CheckIcon as Check,
+  ClockIcon as Clock3,
+  CpuIcon as Bot,
+  Disc3Icon as Magnet,
+  KeyRoundIcon as KeyRound,
+  LinkIcon as Link2,
+  LockIcon as LockKeyhole,
+  ShieldCheckIcon as ShieldCheck,
+  SparklesIcon as Sparkles,
+  ZapIcon as Zap,
+} from '@animateicons/react/lucide'
 import { MarketingHeader } from '~/components/marketing_header'
 import type { InertiaProps } from '~/types'
 

@@ -1,16 +1,16 @@
 import { Head } from '@inertiajs/react'
 import { Form, Link } from '@adonisjs/inertia/react'
 import {
-  ArrowRight,
-  FileUp,
-  LoaderCircle,
-  Magnet,
-  Plus,
-  RefreshCw,
-  RotateCcw,
-  Trash2,
-  TriangleAlert,
-} from 'lucide-react'
+  ArrowRightIcon as ArrowRight,
+  Disc3Icon as Magnet,
+  LoaderCircleIcon as LoaderCircle,
+  PlusIcon as Plus,
+  RefreshCwIcon as RefreshCw,
+  RefreshCwIcon as RotateCcw,
+  Trash2Icon as Trash2,
+  TriangleAlertIcon as TriangleAlert,
+  UploadIcon as FileUp,
+} from '@animateicons/react/lucide'
 import { AppShell } from '~/components/app_shell'
 import { ConnectionRequired } from '~/components/connection_required'
 import { formatBytes, formatDate, magnetProgress } from '~/utils/format'

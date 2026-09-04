@@ -1,16 +1,19 @@
 import { Head } from '@inertiajs/react'
 import { Form } from '@adonisjs/inertia/react'
 import {
-  Bot,
-  CheckCircle2,
-  ExternalLink,
-  KeyRound,
-  LoaderCircle,
-  LockKeyhole,
-  RefreshCw,
-  ShieldCheck,
-  Trash2,
-} from 'lucide-react'
+  CircleCheckIcon as CheckCircle2,
+  CirclePlayIcon,
+  CpuIcon as Bot,
+  ExternalLinkIcon as ExternalLink,
+  KeyRoundIcon as KeyRound,
+  LoaderCircleIcon as LoaderCircle,
+  LockIcon as LockKeyhole,
+  LaptopIcon,
+  RefreshCwIcon as RefreshCw,
+  ShieldCheckIcon as ShieldCheck,
+  SaveIcon,
+  Trash2Icon as Trash2,
+} from '@animateicons/react/lucide'
 import { AppShell } from '~/components/app_shell'
 import { formatDate } from '~/utils/format'
 import type { InertiaProps } from '~/types'
@@ -31,9 +34,16 @@ interface SettingsProps extends InertiaProps {
     base_url: string
   } | null
   pinPending: boolean
+  preferredPlayer: 'browser' | 'vlc' | 'mpv'
 }
 
-export default function Settings({ user, connection, pinSession, pinPending }: SettingsProps) {
+export default function Settings({
+  user,
+  connection,
+  pinSession,
+  pinPending,
+  preferredPlayer,
+}: SettingsProps) {
   return (
     <AppShell user={user!} eyebrow="Compte" title="Réglages">
       <Head title="Réglages" />
@@ -221,6 +231,81 @@ export default function Settings({ user, connection, pinSession, pinPending }: S
             </div>
           </section>
         </aside>
+
+        <section className="settings-main player-settings" aria-labelledby="player-settings-title">
+          <div className="settings-section-heading compact">
+            <span className="settings-icon">
+              <CirclePlayIcon aria-hidden="true" />
+            </span>
+            <div>
+              <p className="eyebrow">Lecture externe</p>
+              <h2 id="player-settings-title">Lecteur local préféré</h2>
+              <p>
+                Choisissez l’application proposée pour ouvrir un média. Aucun chemin local n’est
+                transmis au serveur.
+              </p>
+            </div>
+          </div>
+          <Form
+            route="settings.player"
+            className="player-preference-form"
+            toolname="betterdebrid.player_preference_form"
+            tooldescription="Prépare le choix du lecteur multimédia préféré pour les ouvertures externes."
+          >
+            {({ processing }) => (
+              <>
+                <div className="player-choice-grid" role="radiogroup" aria-label="Lecteur préféré">
+                  {[
+                    {
+                      value: 'browser',
+                      title: 'Navigateur',
+                      description: 'Lecteur BetterDebrid intégré',
+                    },
+                    {
+                      value: 'vlc',
+                      title: 'VLC',
+                      description: 'Playlist M3U ouverte par VLC',
+                    },
+                    {
+                      value: 'mpv',
+                      title: 'MPV',
+                      description: 'Protocole local mpv://',
+                    },
+                  ].map((player) => (
+                    <label className="player-choice" key={player.value}>
+                      <input
+                        type="radio"
+                        name="preferredPlayer"
+                        value={player.value}
+                        defaultChecked={preferredPlayer === player.value}
+                        toolparamdescription={`Sélectionne ${player.title} comme lecteur préféré.`}
+                      />
+                      <span className="player-choice-icon" aria-hidden="true">
+                        {player.value === 'browser' ? <LaptopIcon /> : <CirclePlayIcon />}
+                      </span>
+                      <span>
+                        <strong>{player.title}</strong>
+                        <small>{player.description}</small>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <p className="field-hint">
+                  Pour MPV, le gestionnaire <code>mpv://</code> doit être enregistré localement. VLC
+                  utilise le fichier M3U et l’association de fichiers de votre système.
+                </p>
+                <button type="submit" className="button button-accent" disabled={processing}>
+                  {processing ? (
+                    <LoaderCircle className="spin" aria-hidden="true" />
+                  ) : (
+                    <SaveIcon aria-hidden="true" />
+                  )}
+                  Enregistrer le lecteur
+                </button>
+              </>
+            )}
+          </Form>
+        </section>
 
         <section className="settings-main account-settings" aria-labelledby="local-account-title">
           <div className="settings-section-heading compact">

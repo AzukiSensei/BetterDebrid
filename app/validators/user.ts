@@ -21,6 +21,7 @@ export const signupValidator = vine.create({
   }),
   passwordConfirmation: vine.string().maxLength(128),
   terms: vine.accepted(),
+  turnstileToken: vine.string().trim().minLength(1).maxLength(2048),
 })
 
 /**
@@ -29,4 +30,6 @@ export const signupValidator = vine.create({
 export const loginValidator = vine.create({
   email: email(),
   password: vine.string().maxLength(128),
+  remember: vine.boolean().optional(),
+  turnstileToken: vine.string().trim().minLength(1).maxLength(2048),
 })

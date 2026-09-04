@@ -17,6 +17,21 @@ export default class SettingsController {
         : null,
       pinSession: null,
       pinPending: false,
+      preferredPlayer: auth.user!.preferredPlayer,
     })
+  }
+
+  async updatePlayer({ auth, request, response, session }: HttpContext) {
+    const preferredPlayer = String(request.input('preferredPlayer', 'browser')) as
+      'browser' | 'vlc' | 'mpv'
+    if (!['browser', 'vlc', 'mpv'].includes(preferredPlayer)) {
+      session.flash('error', 'Le lecteur sélectionné est invalide.')
+      return response.redirect().toRoute('settings')
+    }
+
+    auth.user!.preferredPlayer = preferredPlayer
+    await auth.user!.save()
+    session.flash('success', 'Votre lecteur préféré a été enregistré.')
+    return response.redirect().toRoute('settings')
   }
 }

@@ -1,5 +1,5 @@
 import { Link } from '@adonisjs/inertia/react'
-import { Cable, ChevronRight } from 'lucide-react'
+import { ChevronRightIcon as ChevronRight, PlugIcon as Cable } from '@animateicons/react/lucide'
 
 export function ConnectionRequired() {
   return (

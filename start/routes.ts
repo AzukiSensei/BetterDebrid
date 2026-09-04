@@ -5,6 +5,7 @@ import router from '@adonisjs/core/services/router'
 router.on('/').renderInertia('home', {}).as('home')
 router.get('/confidentialite', [controllers.Legal, 'privacy']).as('legal.privacy')
 router.get('/mentions-legales', [controllers.Legal, 'notice']).as('legal.notice')
+router.get('/lecture-externe', [controllers.Media, 'externalSource']).as('media.external')
 router.get('/health', ({ response }) => response.ok({ status: 'ok', service: 'betterdebrid' }))
 
 router
@@ -21,6 +22,7 @@ router
     router.post('/deconnexion', [controllers.Session, 'destroy']).as('session.destroy')
 
     router.get('/app', [controllers.Dashboard, 'index']).as('dashboard')
+    router.post('/app/traiter', [controllers.UniversalInput, 'store']).as('universal_input.store')
 
     router.get('/app/debrider', [controllers.Unrestrict, 'index']).as('unrestrict.index')
     router.post('/app/debrider', [controllers.Unrestrict, 'store']).as('unrestrict.store')
@@ -38,8 +40,18 @@ router
     router.delete('/app/magnets', [controllers.Magnets, 'destroy']).as('magnets.destroy')
     router.post('/app/magnets/relancer', [controllers.Magnets, 'restart']).as('magnets.restart')
 
+    router.get('/app/lecteur', [controllers.Media, 'show']).as('media.show')
+    router.get('/app/lecteur/source', [controllers.Media, 'source']).as('media.source')
+    router.get('/app/lecteur/playlist', [controllers.Media, 'playlist']).as('media.playlist')
+    router
+      .get('/app/lecteur/compatibilite', [controllers.Media, 'compatibilityStream'])
+      .as('media.compatibility')
+
     router.get('/app/historique', [controllers.History, 'index']).as('history')
     router.get('/app/reglages', [controllers.Settings, 'index']).as('settings')
+    router
+      .post('/app/reglages/lecteur', [controllers.Settings, 'updatePlayer'])
+      .as('settings.player')
     router
       .post('/app/reglages/alldebrid/pin', [controllers.AllDebridConnections, 'create'])
       .as('alldebrid.pin.create')

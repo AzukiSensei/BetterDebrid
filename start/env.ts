@@ -27,4 +27,8 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   // Session
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'database'] as const),
+
+  // Cloudflare Turnstile
+  TURNSTILE_SITE_KEY: Env.schema.string.optional(),
+  TURNSTILE_SECRET_KEY: Env.schema.secret.optional(),
 })

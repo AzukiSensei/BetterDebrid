@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react'
 import { Link } from '@adonisjs/inertia/react'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft } from '@animateicons/react/lucide'
 import { MarketingHeader } from '~/components/marketing_header'
 import type { InertiaProps } from '~/types'
 

@@ -1,5 +1,5 @@
 import { Link } from '@adonisjs/inertia/react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRightIcon as ArrowUpRight } from '@animateicons/react/lucide'
 import { BrandMark } from './brand_mark'
 
 export function MarketingHeader({ authenticated = false }: { authenticated?: boolean }) {

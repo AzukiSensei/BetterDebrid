@@ -4,9 +4,12 @@ import AllDebridService, { AllDebridApiError } from '#services/all_debrid_servic
 import { findConnection, requireConnection } from '#services/connection_service'
 import { magnetIdValidator, magnetUploadValidator } from '#validators/all_debrid'
 import type { HttpContext } from '@adonisjs/core/http'
+import MediaTokenService from '#services/media_token_service'
+import type { AllDebridFileNode } from '#services/all_debrid_service'
 
 export default class MagnetsController {
   private client = new AllDebridService()
+  private mediaTokens = new MediaTokenService()
 
   async index({ auth, inertia }: HttpContext) {
     const connection = await findConnection(auth.user!.id)
@@ -43,7 +46,11 @@ export default class MagnetsController {
         this.client.getMagnetFiles(connection.getApiKey(), id),
       ])
       if (!magnet) return response.notFound()
-      return inertia.render('magnets/show', { magnet, files, apiError: null })
+      return inertia.render('magnets/show', {
+        magnet,
+        files: this.withMediaTokens(files, auth.user!.id),
+        apiError: null,
+      })
     } catch (error) {
       return inertia.render('magnets/show', {
         magnet: null,
@@ -158,5 +165,14 @@ export default class MagnetsController {
     return error instanceof AllDebridApiError || error instanceof Error
       ? error.message
       : 'AllDebrid est momentanément indisponible.'
+  }
+
+  private withMediaTokens(nodes: AllDebridFileNode[], userId: number): AllDebridFileNode[] {
+    return nodes.map((node) => {
+      if (node.e) return { ...node, e: this.withMediaTokens(node.e, userId) }
+      if (!node.l) return node
+      const media = this.mediaTokens.create(userId, node.l, node.n)
+      return media ? { ...node, mediaToken: media.token, mediaKind: media.kind } : node
+    })
   }
 }

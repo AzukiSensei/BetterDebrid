@@ -1,5 +1,9 @@
 import { Link } from '@adonisjs/inertia/react'
-import { ArrowLeft, Check, ShieldCheck } from 'lucide-react'
+import {
+  ArrowLeftIcon as ArrowLeft,
+  CheckIcon as Check,
+  ShieldCheckIcon as ShieldCheck,
+} from '@animateicons/react/lucide'
 import type { ReactNode } from 'react'
 import { BrandMark } from './brand_mark'
 

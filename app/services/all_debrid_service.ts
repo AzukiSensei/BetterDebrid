@@ -81,6 +81,8 @@ export interface AllDebridFileNode {
   s?: number
   l?: string
   e?: AllDebridFileNode[]
+  mediaToken?: string
+  mediaKind?: 'video' | 'audio'
 }
 
 export interface AllDebridHistoryLink {

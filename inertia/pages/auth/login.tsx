@@ -1,9 +1,20 @@
 import { Head } from '@inertiajs/react'
 import { Form } from '@adonisjs/inertia/react'
-import { ArrowRight, LoaderCircle, LockKeyhole, Mail } from 'lucide-react'
+import {
+  ArrowRightIcon as ArrowRight,
+  LoaderCircleIcon as LoaderCircle,
+  LockIcon as LockKeyhole,
+  MailIcon as Mail,
+} from '@animateicons/react/lucide'
+import { useState } from 'react'
 import { AuthShell } from '~/components/auth_shell'
+import { PasswordVisibilityButton } from '~/components/password_visibility_button'
+import { TurnstileWidget } from '~/components/turnstile_widget'
+import type { InertiaProps } from '~/types'
 
-export default function Login() {
+export default function Login({ turnstileSiteKey }: InertiaProps) {
+  const [passwordVisible, setPasswordVisible] = useState(false)
+
   return (
     <AuthShell mode="login">
       <Head title="Connexion" />
@@ -48,10 +59,10 @@ export default function Login() {
 
             <div className="field-group">
               <label htmlFor="password">Mot de passe</label>
-              <div className="input-with-icon">
+              <div className="input-with-icon input-with-action">
                 <LockKeyhole aria-hidden="true" />
                 <input
-                  type="password"
+                  type={passwordVisible ? 'text' : 'password'}
                   name="password"
                   id="password"
                   required
@@ -61,6 +72,11 @@ export default function Login() {
                   aria-describedby={errors.password ? 'password-error' : undefined}
                   toolparamdescription="Mot de passe du compte BetterDebrid."
                 />
+                <PasswordVisibilityButton
+                  controls="password"
+                  visible={passwordVisible}
+                  onToggle={() => setPasswordVisible((visible) => !visible)}
+                />
               </div>
               {errors.password && (
                 <p className="field-error" id="password-error">
@@ -69,10 +85,31 @@ export default function Login() {
               )}
             </div>
 
+            <label className="remember-field">
+              <input
+                type="checkbox"
+                name="remember"
+                value="true"
+                toolparamdescription="Conserver la connexion BetterDebrid pendant 30 jours sur cet appareil."
+              />
+              <span>
+                <strong>Rester connecté pendant 30 jours</strong>
+                Uniquement sur un appareil personnel.
+              </span>
+            </label>
+
+            {turnstileSiteKey ? (
+              <TurnstileWidget siteKey={turnstileSiteKey} action="login" />
+            ) : (
+              <p className="field-error" role="alert">
+                La protection anti-robot est temporairement indisponible.
+              </p>
+            )}
+
             <button
               type="submit"
               className="button button-accent button-wide button-large"
-              disabled={processing}
+              disabled={processing || !turnstileSiteKey}
             >
               {processing ? <LoaderCircle className="spin" aria-hidden="true" /> : null}
               {processing ? 'Connexion…' : 'Accéder à mon espace'}

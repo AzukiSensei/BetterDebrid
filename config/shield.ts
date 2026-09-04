@@ -17,7 +17,10 @@ const shieldConfig = defineConfig({
      */
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'"],
+      connectSrc: ["'self'", 'https://challenges.cloudflare.com'],
+      scriptSrc: ["'self'", 'https://challenges.cloudflare.com'],
+      frameSrc: ['https://challenges.cloudflare.com'],
+      mediaSrc: ["'self'", 'https:', 'blob:'],
       imgSrc: ["'self'", 'data:'],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],

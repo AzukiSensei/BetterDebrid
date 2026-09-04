@@ -1,15 +1,17 @@
 import { Head } from '@inertiajs/react'
 import { Form, Link } from '@adonisjs/inertia/react'
 import {
-  ArrowLeft,
-  Download,
-  File,
-  Folder,
-  Magnet,
-  RotateCcw,
-  Trash2,
-  TriangleAlert,
-} from 'lucide-react'
+  ArrowLeftIcon as ArrowLeft,
+  Disc3Icon as Magnet,
+  DownloadIcon as Download,
+  FileIcon as File,
+  FolderIcon as Folder,
+  HeadphonesIcon,
+  RefreshCwIcon as RotateCcw,
+  Trash2Icon as Trash2,
+  TriangleAlertIcon as TriangleAlert,
+  VideoIcon,
+} from '@animateicons/react/lucide'
 import { AppShell } from '~/components/app_shell'
 import { formatBytes, formatDate, magnetProgress } from '~/utils/format'
 import type { InertiaProps } from '~/types'
@@ -19,6 +21,8 @@ type FileNode = {
   s?: number
   l?: string
   e?: FileNode[]
+  mediaToken?: string
+  mediaKind?: 'video' | 'audio'
 }
 
 type MagnetData = {
@@ -202,15 +206,30 @@ function FileTreeNode({ node, depth }: { node: FileNode; depth: number }) {
         <span className="file-name">{node.n}</span>
         <span>{formatBytes(node.s)}</span>
         {node.l ? (
-          <a
-            href={node.l}
-            className="icon-button"
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Télécharger ${node.n}`}
-          >
-            <Download aria-hidden="true" />
-          </a>
+          <span className="file-actions">
+            {node.mediaToken && (
+              <Link
+                href={`/app/lecteur?token=${encodeURIComponent(node.mediaToken)}`}
+                className="icon-button player-button"
+                aria-label={`Lire ${node.n}`}
+              >
+                {node.mediaKind === 'audio' ? (
+                  <HeadphonesIcon aria-hidden="true" />
+                ) : (
+                  <VideoIcon aria-hidden="true" />
+                )}
+              </Link>
+            )}
+            <a
+              href={node.l}
+              className="icon-button"
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Télécharger ${node.n}`}
+            >
+              <Download aria-hidden="true" />
+            </a>
+          </span>
         ) : (
           <span className="icon-placeholder" />
         )}

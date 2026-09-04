@@ -1,6 +1,13 @@
 import { Form, Link } from '@adonisjs/inertia/react'
 import { usePage } from '@inertiajs/react'
-import { ArrowDownToLine, Clock3, Gauge, LogOut, Magnet, Settings } from 'lucide-react'
+import {
+  ClockIcon as Clock3,
+  DashboardIcon as Gauge,
+  Disc3Icon as Magnet,
+  DownloadIcon as ArrowDownToLine,
+  LogOutIcon as LogOut,
+  SettingsIcon as Settings,
+} from '@animateicons/react/lucide'
 import type { ReactNode } from 'react'
 import { BrandMark } from './brand_mark'
 

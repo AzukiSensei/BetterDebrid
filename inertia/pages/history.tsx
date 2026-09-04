@@ -1,13 +1,13 @@
 import { Head } from '@inertiajs/react'
 import { Link } from '@adonisjs/inertia/react'
 import {
-  Archive,
-  ArrowDownToLine,
-  Clock3,
-  ExternalLink,
-  History as HistoryIcon,
-  TriangleAlert,
-} from 'lucide-react'
+  ClockIcon as Clock3,
+  DownloadIcon as ArrowDownToLine,
+  ExternalLinkIcon as ExternalLink,
+  FileArchiveIcon as Archive,
+  HistoryIcon,
+  TriangleAlertIcon as TriangleAlert,
+} from '@animateicons/react/lucide'
 import { useState } from 'react'
 import { AppShell } from '~/components/app_shell'
 import { ConnectionRequired } from '~/components/connection_required'

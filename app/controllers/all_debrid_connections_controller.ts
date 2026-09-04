@@ -9,13 +9,14 @@ import { DateTime } from 'luxon'
 export default class AllDebridConnectionsController {
   private client = new AllDebridService()
 
-  async create({ inertia, session, response }: HttpContext) {
+  async create({ auth, inertia, session, response }: HttpContext) {
     try {
       const pinSession = await this.client.getPin()
       return inertia.render('settings', {
         connection: null,
         pinSession,
         pinPending: false,
+        preferredPlayer: auth.user!.preferredPlayer,
       })
     } catch (error) {
       session.flash('error', this.messageFor(error))
@@ -39,6 +40,7 @@ export default class AllDebridConnectionsController {
             base_url: 'https://alldebrid.com/pin/',
           },
           pinPending: true,
+          preferredPlayer: auth.user!.preferredPlayer,
         })
       }
 
